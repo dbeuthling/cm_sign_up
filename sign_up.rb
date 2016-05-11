@@ -6,9 +6,10 @@ class Camper
     @buddy_number = buddy_number
   end
 
-  def self.activities(name)
+  def self.activities(camper)
+    puts "---#{camper.name}---"
     ObjectSpace.each_object(Activity) do |activ|
-      puts activ.title if activ.campers.include?(name)
+      puts "#{activ.title} - #{activ.period}" if activ.campers.include?(camper.name)
     end
 
   end
@@ -16,7 +17,7 @@ class Camper
 end
 
 class Activity
-  attr_reader :campers, :title
+  attr_reader :campers, :title, :period
 
   def initialize(title, period, capacity, campers=[])
     @title = title
@@ -34,7 +35,7 @@ class Activity
   end
 
   def remove_camper(boy)
-    @campers.delete(boy.name) { "#{boy.name} is not in the list."}
+    @campers.delete(boy.name) { "#{boy.name} is not listed in #{self.title}."}
   end
 
 end
@@ -46,9 +47,11 @@ archery.add_camper(bill)
 archery.add_camper(andy)
 tubing = Activity.new('Tubing', 'second', 6)
 tubing.add_camper(andy)
-p archery.campers
-p tubing.campers
-Camper.activities("Andy")
-archery.remove_camper(andy)
-p archery.campers
-Camper.activities("Andy")
+# p archery.campers
+# p tubing.campers
+Camper.activities(andy)
+Camper.activities(bill)
+# archery.remove_camper(andy)
+# p archery.campers
+# Camper.activities(andy)
+# p archery.remove_camper(andy)
