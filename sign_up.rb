@@ -1,4 +1,3 @@
-# sign_up.rb
 class Camper
   attr_reader :name
 
@@ -8,8 +7,8 @@ class Camper
   end
 
   def self.activities(name)
-    ObjectSpace.each_object(Activity) do |x|
-      p x.title if x.campers.include?(name)
+    ObjectSpace.each_object(Activity) do |activ|
+      puts activ.title if activ.campers.include?(name)
     end
 
   end
@@ -53,4 +52,3 @@ Camper.activities("Andy")
 archery.remove_camper(andy)
 p archery.campers
 Camper.activities("Andy")
-
