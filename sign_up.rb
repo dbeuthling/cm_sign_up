@@ -1,9 +1,9 @@
 class Camper
   attr_reader :name
 
-  def initialize(name, buddy_number)
+  def initialize(name)
     @name = name
-    @buddy_number = buddy_number
+    # @buddy_number = buddy_number
   end
 
   def self.activities(camper)
@@ -30,28 +30,61 @@ class Activity
     @campers.length >= @capacity
   end
 
-  def add_camper(boy)
-    full ? puts("#{self.title} is full.") : @campers << boy.name
+  def add_camper(camper)
+    full ? puts("#{self.title} is full.") : @campers << camper.name
   end
 
-  def remove_camper(boy)
-    @campers.delete(boy.name) { "#{boy.name} is not listed in #{self.title}."}
+  def remove_camper(camper)
+    @campers.delete(camper.name) { "#{camper.name} is not listed in #{self.title}."}
   end
 
 end
 
-bill = Camper.new("Bill", "M10")
-andy = Camper.new("Andy", "B5")
+class Day
+
+  def self.activity_participants(period)
+    period_hash = {}
+    ObjectSpace.each_object(Activity) do |activ|
+      period_hash[activ.title] = activ.campers if activ.period == period
+    end
+    puts "---#{period.capitalize} Period---"
+    period_hash
+  end
+
+  def add_campers
+    campers = {}
+    loop do
+      puts "What is the name of the camper to add?"
+      camper = gets.chomp.downcase
+      puts "What is the camper's buddy nubmer?"
+      buddy_number = gets.chomp.to_sym
+      campers[buddy_number] = camper
+      puts "Again? (y/n)"
+      again = gets.chomp
+      break unless again == 'y'
+    end
+    p campers
+  end
+
+
+end
+
+m10 = Camper.new("Bill")
+b5 = Camper.new("Andy")
 archery = Activity.new('Archery', 'first', 10)
-archery.add_camper(bill)
-archery.add_camper(andy)
+archery.add_camper(m10)
+archery.add_camper(b5)
 tubing = Activity.new('Tubing', 'second', 6)
-tubing.add_camper(andy)
+tubing.add_camper(b5)
 # p archery.campers
 # p tubing.campers
-Camper.activities(andy)
-Camper.activities(bill)
+# Camper.activities(andy)
+# Camper.activities(bill)
 # archery.remove_camper(andy)
 # p archery.campers
 # Camper.activities(andy)
 # p archery.remove_camper(andy)
+p Day.activity_participants('first')
+p Day.activity_participants('second')
+today = Day.new
+today.add_campers
